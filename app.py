@@ -4,7 +4,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 
 load_dotenv()
 
-app = Flask(name) app.secret_key = 'your_secret_key'
+app = Flask(name) app.secret_key = 'https://www.kwikapi.com/api/v2/recharge.php?api_key=YOUR SECRET KEY&number=7070300613&amount=10&opid=21&state_code=0&order_id=452145277
+
+'
 
 API_KEY = os.getenv("KWIKAPI_KEY") BASE_URL = os.getenv("KWIKAPI_BASE", "https://www.kwikapi.com/api/v2")
 
