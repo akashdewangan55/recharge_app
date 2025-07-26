@@ -92,14 +92,36 @@ def recharge():
         flash('Recharge successful!', 'success')
     return render_template('recharge.html')
 
-@app.route('/history')
-def history():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    recharges = load_recharges()
-    user_recharges = [r for r in recharges if r['email'] == session['user']]
-    return render_template('history.html', recharges=user_recharges)
+@app.route('/recharge', methods=['POST'])
+def recharge():
+    number = request.form['number']
+    opid = request.form['opid']  # Hidden field or select operator
+    amount = request.form['amount']
+    order_id = str(int(time.time()))  # Unique order ID by timestamp
 
+    result = do_recharge(number, opid, amount, order_id)
+
+    status = result.get("status", "FAILED")
+    txn_id = result.get("transaction_id")
+    msg = result.get("message", "")
+
+    recharge = {
+        'email': session['user'],
+        'number': number,
+        'operator': opid,
+        'amount': amount,
+        'status': status,
+        'txn_id': txn_id,
+        'message': msg,
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+    recharges = load_recharges()
+    recharges.append(recharge)
+    save_recharges(recharges)
+
+    flash(f"Recharge {status}: {msg}", 'success' if status == 'SUCCESS' else 'danger')
+    return redirect(url_for('recharge'))
+    
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
