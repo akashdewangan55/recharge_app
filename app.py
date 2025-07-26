@@ -1,50 +1,80 @@
-recharge_app.py
-
-from flask import Flask, render_template, request, redirect, url_for, flash, session import requests import os import json from datetime import datetime import time from dotenv import load_dotenv
+from flask import Flask, render_template, request, redirect, url_for, flash
+import requests
+import os
+import json
+from datetime import datetime
+import time
+from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(name) app.secret_key = 'https://www.kwikapi.com/api/v2/recharge.php?api_key=YOUR SECRET KEY&number=7070300613&amount=10&opid=21&state_code=0&order_id=452145277
+app = Flask(__name__)
+app.secret_key = 'https://www.kwikapi.com/api/v2/recharge.php?api_key=YOUR SECRET KEY&number=7070300613&amount=10&opid=21&state_code=0&order_id=452145277
 
 '
 
-API_KEY = os.getenv("KWIKAPI_KEY") BASE_URL = os.getenv("KWIKAPI_BASE", "https://www.kwikapi.com/api/v2")
-
+API_KEY = os.getenv("KWIKAPI_KEY")
+BASE_URL = os.getenv("KWIKAPI_BASE", "https://www.kwikapi.com/api/v2")
 RECHARGE_FILE = 'recharge_history.json'
 
-def load_recharges(): if os.path.exists(RECHARGE_FILE): with open(RECHARGE_FILE, 'r') as f: return json.load(f) return []
+def load_recharges():
+    if os.path.exists(RECHARGE_FILE):
+        with open(RECHARGE_FILE, 'r') as f:
+            return json.load(f)
+    return []
 
-def save_recharges(data): with open(RECHARGE_FILE, 'w') as f: json.dump(data, f, indent=4)
+def save_recharges(data):
+    with open(RECHARGE_FILE, 'w') as f:
+        json.dump(data, f, indent=4)
 
-def do_recharge(number, opid, amount, order_id): url = f"{BASE_URL}/recharge.php" params = { "api_key": API_KEY, "number": number, "amount": amount, "opid": opid, "state_code": 0, "order_id": order_id } response = requests.get(url, params=params, timeout=20) return response.json()
-
-@app.route('/') def home(): return render_template('index.html')
-
-@app.route('/recharge', methods=['GET', 'POST']) def recharge(): if request.method == 'POST': number = request.form['number'] opid = request.form['opid'] amount = request.form['amount'] order_id = str(int(time.time()))
-
-result = do_recharge(number, opid, amount, order_id)
-
-    status = result.get("status", "FAILED")
-    message = result.get("message", "No message")
-    txn_id = result.get("transaction_id", "-")
-
-    history = load_recharges()
-    history.append({
+def do_recharge(number, opid, amount, order_id):
+    url = f"{BASE_URL}/recharge.php"
+    params = {
+        "api_key": API_KEY,
         "number": number,
-        "operator": opid,
         "amount": amount,
-        "status": status,
-        "message": message,
-        "txn_id": txn_id,
-        "datetime": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    })
-    save_recharges(history)
+        "opid": opid,
+        "state_code": 0,
+        "order_id": order_id
+    }
+    response = requests.get(url, params=params, timeout=20)
+    return response.json()
 
-    flash(f"Recharge {status}: {message}", 'success' if status == 'SUCCESS' else 'danger')
-    return redirect(url_for('recharge'))
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-history = load_recharges()[::-1]  # reverse for latest on top
-return render_template('recharge.html', history=history)
+@app.route('/recharge', methods=['GET', 'POST'])
+def recharge():
+    if request.method == 'POST':
+        number = request.form['number']
+        opid = request.form['opid']
+        amount = request.form['amount']
+        order_id = str(int(time.time()))
 
-if name == 'main': app.run(debug=True, port=5000)
+        result = do_recharge(number, opid, amount, order_id)
 
+        status = result.get("status", "FAILED")
+        message = result.get("message", "No message")
+        txn_id = result.get("transaction_id", "-")
+
+        history = load_recharges()
+        history.append({
+            "number": number,
+            "operator": opid,
+            "amount": amount,
+            "status": status,
+            "message": message,
+            "txn_id": txn_id,
+            "datetime": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        })
+        save_recharges(history)
+
+        flash(f"Recharge {status}: {message}", 'success' if status == 'SUCCESS' else 'danger')
+        return redirect(url_for('recharge'))
+
+    history = load_recharges()[::-1]  # Show latest first
+    return render_template('recharge.html', history=history)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
