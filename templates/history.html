@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Recharge History{% endblock %}
+{% block content %}
+<h2>Recharge History</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Mobile Number</th>
+      <th>Operator</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in recharges %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ r.number }}</td>
+      <td>{{ r.operator }}</td>
+      <td>{{ r.amount }}</td>
+      <td>{{ r.status }}</td>
+      <td>{{ r.timestamp }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Recharge{% endblock %}
+{% block content %}
+<h2>Mobile Recharge</h2>
+<form method="POST">
+  <div class="mb-3">
+    <label>Mobile Number</label>
+    <input type="text" class="form-control" name="number" required>
+  </div>
+  <div class="mb-3">
+    <label>Operator</label>
+    <select class="form-control" name="operator" required>
+      <option value="Airtel">Airtel</option>
+      <option value="Jio">Jio</option>
+      <option value="Vi">Vi</option>
+      <option value="BSNL">BSNL</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label>Amount</label>
+    <input type="number" class="form-control" name="amount" required>
+  </div>
+  <button class="btn btn-primary">Recharge</button>
+</form>
+{% endblock %}
