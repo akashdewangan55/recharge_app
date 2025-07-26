@@ -9,13 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'https://www.kwikapi.com/api/v2/recharge.php?api_key=YOUR SECRET KEY&number=7070300613&amount=10&opid=21&state_code=0&order_id=452145277
+app.secret_key = 'your_secret_key_here'  # Set a secure random string in production
 
-'
-
+# Load API details from .env
 API_KEY = os.getenv("KWIKAPI_KEY")
 BASE_URL = os.getenv("KWIKAPI_BASE", "https://www.kwikapi.com/api/v2")
 RECHARGE_FILE = 'recharge_history.json'
+
 
 def load_recharges():
     if os.path.exists(RECHARGE_FILE):
@@ -23,9 +23,11 @@ def load_recharges():
             return json.load(f)
     return []
 
+
 def save_recharges(data):
     with open(RECHARGE_FILE, 'w') as f:
         json.dump(data, f, indent=4)
+
 
 def do_recharge(number, opid, amount, order_id):
     url = f"{BASE_URL}/recharge.php"
@@ -40,9 +42,11 @@ def do_recharge(number, opid, amount, order_id):
     response = requests.get(url, params=params, timeout=20)
     return response.json()
 
+
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 @app.route('/recharge', methods=['GET', 'POST'])
 def recharge():
@@ -73,8 +77,9 @@ def recharge():
         flash(f"Recharge {status}: {message}", 'success' if status == 'SUCCESS' else 'danger')
         return redirect(url_for('recharge'))
 
-    history = load_recharges()[::-1]  # Show latest first
+    history = load_recharges()[::-1]  # show latest first
     return render_template('recharge.html', history=history)
 
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
