@@ -78,7 +78,7 @@ def recharge():
         return redirect(url_for('recharge'))
 
     history = load_recharges()[::-1]  # show latest first
-    return render_template('index.html', history=history)
+    return render_template('recharge.html', history=history)
 
 
 if __name__ == '__main__':
