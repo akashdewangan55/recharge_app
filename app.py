@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Set a secure random string in production
+app.secret_key = 's3cr3t_@k45h_R3ch@rg3_2025!'  # Set a secure random string in production
 
 # Load API details from .env
 API_KEY = os.getenv("KWIKAPI_KEY")
