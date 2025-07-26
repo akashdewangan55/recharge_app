@@ -8,8 +8,9 @@
     {% endfor %}
   {% endif %}
 {% endwith %}
+
 <h2>Mobile Recharge</h2>
-<form method="POST">
+<form method="POST" action="/recharge">
   <div class="mb-3">
     <label>Mobile Number</label>
     <input type="text" class="form-control" name="number" required>
@@ -17,10 +18,10 @@
   <div class="mb-3">
     <label>Operator</label>
     <select class="form-control" name="opid" required>
-      <option value="Airtel">Airtel</option>
-      <option value="Jio">Jio</option>
-      <option value="Vi">Vi</option>
-      <option value="BSNL">BSNL</option>
+      <option value="1">Airtel</option>
+      <option value="11">Jio</option>
+      <option value="22">Vi</option>
+      <option value="3">BSNL</option>
     </select>
   </div>
   <div class="mb-3">
