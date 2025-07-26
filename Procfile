@@ -1,1 +1,1 @@
-web: python app.py
+web: gunicorn recharge_app:app
