@@ -13,7 +13,7 @@
 <form method="POST" action="/recharge">
   <div class="mb-3">
     <label>Mobile Number</label>
-    <input type="text" class="form-control" name="number" required>
+    <input type="tel" pattern="[0-9]{10}" maxlength="10" class="form-control" name="number" required>
   </div>
   <div class="mb-3">
     <label>Operator</label>
