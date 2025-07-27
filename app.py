@@ -121,6 +121,8 @@ def register():
 
     return render_template('register.html')
 
+history_data = {}
+
 @app.route('/history')
 def history():
     if not session.get('user'):
