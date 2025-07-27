@@ -11,14 +11,16 @@
   <a class="navbar-brand" href="/">RechargeApp</a>
 
   {% if session.get('user_email') %}
-    <div class="d-flex align-items-center">
-      <span class="text-light me-3">{{ session['user_email'] }}</span>
-      <a class="btn btn-outline-light me-2" href="/logout">Logout</a> <!-- 🔼 Moved before -->
-      <a class="btn btn-outline-light me-2" href="/recharge">Recharge</a>
-      <a class="btn btn-outline-light" href="/history">History</a>
+    <div class="d-flex flex-column align-items-end ms-auto">
+      <span class="text-light mb-2">{{ session['user_email'] }}</span>
+      <a class="btn btn-outline-light mb-2" href="/logout">Logout</a>
+      <div class="d-flex">
+        <a class="btn btn-outline-light me-2" href="/recharge">Recharge</a>
+        <a class="btn btn-outline-light" href="/history">History</a>
+      </div>
     </div>
   {% else %}
-    <a class="btn btn-outline-light" href="/login">Login</a>
+    <a class="btn btn-outline-light ms-auto" href="/login">Login</a>
   {% endif %}
   </nav>
   
