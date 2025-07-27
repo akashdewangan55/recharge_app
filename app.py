@@ -82,6 +82,11 @@ def recharge():
 
 from flask import session  # make sure this is imported at the top
 
+# Sample user dictionary
+users = {
+    "user@example.com": {"password": "123456"}
+}
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
