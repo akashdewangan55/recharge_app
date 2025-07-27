@@ -117,5 +117,11 @@ def register():
 
     return render_template('register.html')
 
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    flash("Logged out successfully.", "success")
+    return redirect(url_for('home'))
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
