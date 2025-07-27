@@ -121,6 +121,14 @@ def register():
 
     return render_template('register.html')
 
+@app.route('/history')
+def history():
+    if not session.get('user'):
+        return redirect(url_for('login'))
+    user_email = session['user']
+    user_history = history_data.get(user_email, [])
+    return render_template('history.html', history=user_history)
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)
