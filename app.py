@@ -11,6 +11,8 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = 's3cr3t_@k45h_R3ch@rg3_2025!'  # Set a secure random string in production
 
+history_data = {}
+
 # Load API details from .env
 API_KEY = os.getenv("KWIKAPI_KEY")
 BASE_URL = os.getenv("KWIKAPI_BASE", "https://www.kwikapi.com/api/v2")
@@ -121,7 +123,6 @@ def register():
 
     return render_template('register.html')
 
-history_data = {}
 
 @app.route('/history')
 def history():
