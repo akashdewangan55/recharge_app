@@ -10,15 +10,16 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">RechargeApp</a>
-      <div class="d-flex">
-        {% if session.get('user') %}
-          <a class="btn btn-outline-light me-2" href="/recharge">Recharge</a>
-          <a class="btn btn-outline-light me-2" href="/history">History</a>
-          <a class="btn btn-outline-light" href="/logout">Logout</a>
-        {% else %}
-          <a class="btn btn-outline-light" href="/login">Login</a>
-        {% endif %}
-      </div>
+      <div class="d-flex align-items-center">
+  {% if session.get('user') %}
+    <span class="text-light me-3">{{ session.get('user') }}</span>
+    <a class="btn btn-outline-light me-2" href="/recharge">Recharge</a>
+    <a class="btn btn-outline-light me-2" href="/history">History</a>
+    <a class="btn btn-outline-light" href="/logout">Logout</a>
+  {% else %}
+    <a class="btn btn-outline-light" href="/login">Login</a>
+  {% endif %}
+</div>
     </div>
   </nav>
   <div class="container mt-4">
