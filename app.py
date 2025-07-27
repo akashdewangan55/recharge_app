@@ -80,8 +80,7 @@ def recharge():
     history = load_recharges()[::-1]  # show latest first
     return render_template('index.html', history=history)
 
-# Dummy in-memory user storage (Replace with database in production)
-users = {}
+from flask import session  # make sure this is imported at the top
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -91,9 +90,9 @@ def login():
         user = users.get(email)
 
         if user and user['password'] == password:
-    session['user'] = email  # Store email in session
-    flash("Login successful!", "success")
-    return redirect(url_for('recharge'))
+            session['user'] = email  # ✅ Correctly indented inside this 'if'
+            flash("Login successful!", "success")
+            return redirect(url_for('recharge'))
         else:
             flash("Invalid email or password", "danger")
             return redirect(url_for('login'))
