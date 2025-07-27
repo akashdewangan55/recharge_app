@@ -91,8 +91,9 @@ def login():
         user = users.get(email)
 
         if user and user['password'] == password:
-            flash("Login successful!", "success")
-            return redirect(url_for('recharge'))
+    session['user'] = email  # Store email in session
+    flash("Login successful!", "success")
+    return redirect(url_for('recharge'))
         else:
             flash("Invalid email or password", "danger")
             return redirect(url_for('login'))
