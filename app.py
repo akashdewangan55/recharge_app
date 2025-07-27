@@ -80,6 +80,41 @@ def recharge():
     history = load_recharges()[::-1]  # show latest first
     return render_template('index.html', history=history)
 
+# Dummy in-memory user storage (Replace with database in production)
+users = {}
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = users.get(email)
+
+        if user and user['password'] == password:
+            flash("Login successful!", "success")
+            return redirect(url_for('recharge'))
+        else:
+            flash("Invalid email or password", "danger")
+            return redirect(url_for('login'))
+
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        if email in users:
+            flash("Email already registered.", "danger")
+            return redirect(url_for('register'))
+
+        users[email] = {"password": password}
+        flash("Registration successful! You can now log in.", "success")
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
