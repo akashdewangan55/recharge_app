@@ -3,6 +3,10 @@
 {% block content %}
 
 <h2>Mobile Recharge</h2>
+
+<!-- History Button -->
+<a href="{{ url_for('recharge') }}" class="btn btn-secondary mb-3">History</a>
+
 <form method="POST" action="/recharge">
   <div class="mb-3">
     <label>Mobile Number</label>
